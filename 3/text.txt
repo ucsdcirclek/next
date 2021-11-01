@@ -1,0 +1,39 @@
+import { useState, useRef, useEffect } from 'react';
+import './App.css';
+
+
+//React uses ES6 which allows us to insert Javasscript code direclty into html using {}
+function App() {
+  //state
+  const [todos, setTodos] = useState([]);
+
+  // Binding
+  const todoText = useRef();
+
+  //keyword first initialized
+  useEffect(() => {
+    const existingTodos = localStorage.getItem('todos');
+    setTodos(existingTodos ? JSON.parse(existingTodos) : []);
+  }, []);
+
+  function addTodo(event) {
+    event.preventDefault();
+    const next = [...todos, todoText.current.value];
+    setTodos(next);
+    localStorage.setItem('todos', JSON.stringify(next));
+  }
+
+  return (
+    <div className="App">
+        <ul>
+          {todos.map(todo => (<li key={todo}>{todo}</li>))}
+        </ul>
+        <form onSubmit={addTodo}>
+          <input ref={todoText} />
+          <input type="submit" value="Add Todo" />
+        </form>
+    </div>
+  );
+}
+
+export default App;
